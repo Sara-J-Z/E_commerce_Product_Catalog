@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework' # <---- rest framework package
 ]
 
-
+AUTH_USER_MODEL = 'main_app.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,7 +79,11 @@ WSGI_APPLICATION = 'Scentora_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'Scentora_django' / 'db.sqlite3',
+        'USER': 'postgres',
+        'PASSWORD': 'Ga123',
+        'HOST': 'localhost',  
+        'PORT': '5432',
     }
 }
 
