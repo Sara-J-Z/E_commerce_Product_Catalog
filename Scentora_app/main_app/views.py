@@ -12,6 +12,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 class BrandViewSet(viewsets.ModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
+
 from .models import CustomUser, Category
 from .serializers import CustomUserSerializer, CategorySerializer
 
@@ -24,3 +25,4 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+

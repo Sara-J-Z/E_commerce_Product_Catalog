@@ -138,6 +138,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 import os
 
 MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+import os
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
->>>>>>> 228aec9ea0d355367b7f6dc29d07343c8e4886e2
+=========
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+>>>>>>>>> Temporary merge branch 2

@@ -8,7 +8,7 @@ from .views import CustomUserViewSet, CategoryViewSet
 router = DefaultRouter()
 router.register(r'users', CustomUserViewSet, basename='user')
 router.register(r'categories', CategoryViewSet, basename='category')
->>>>>>> 228aec9ea0d355367b7f6dc29d07343c8e4886e2
+
 
 router = DefaultRouter()
 router.register(r'products', ProductViewSet)
@@ -20,7 +20,6 @@ path('api/', include(router.urls)),
 =======
     path('api/', include(router.urls)),
    
->>>>>>> 228aec9ea0d355367b7f6dc29d07343c8e4886e2
 ]
 
 
