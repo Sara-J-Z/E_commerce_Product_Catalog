@@ -14,8 +14,6 @@ router.register(r'brands', BrandViewSet)
 
 urlpatterns = [
 path('api/', include(router.urls)),
-    path('api/', include(router.urls)),
-   
 ]
 
 

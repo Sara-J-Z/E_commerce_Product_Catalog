@@ -27,3 +27,5 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'is_active')
     search_fields = ('name',)
     list_filter = ('is_active',)
+
+
