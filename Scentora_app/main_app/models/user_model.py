@@ -1,7 +1,7 @@
 from django.db import models
-from .user_model import CustomUser
-from django.contrib.auth.models import User
-from django.contrib.auth.models import BaseUserManager, AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -9,6 +9,7 @@ class CustomUserManager(BaseUserManager):
         user = self.model(
             email=email,
             **extra_fields
+
         )
 
         user.set_password(password)

@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main_app', # <---- your app name here
-    'rest_framework' # <---- rest framework package
+    'rest_framework', # <---- rest framework package,
 ]
 
 AUTH_USER_MODEL = 'main_app.CustomUser'
@@ -78,14 +78,16 @@ WSGI_APPLICATION = 'Scentora_app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'Scentora_django' / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Scentora_django',
         'USER': 'postgres',
         'PASSWORD': 'Ga123',
         'HOST': 'localhost',  
         'PORT': '5432',
     }
 }
+
+
 
 
 # Password validation
@@ -128,3 +130,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Media files (for file uploads)
+
+import os
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

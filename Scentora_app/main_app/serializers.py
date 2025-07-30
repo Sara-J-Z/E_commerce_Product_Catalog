@@ -1,13 +1,17 @@
 from rest_framework import serializers
-from .models import Category, Listing
-from django.contrib.auth.models import User
+from rest_framework import serializers
+from .models import CustomUser, Category
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['id', 'username', 'email']
+        model = CustomUser
+        fields = [
+            'id', 'email', 'username', 'date_of_birth', 'phone_number',
+            'address', 'gender'
+        ]
+        # You can add extra kwargs if needed, e.g. read_only_fields = ['id']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ['id', 'name', 'icon', 'is_active']

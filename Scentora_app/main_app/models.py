@@ -1,4 +1,5 @@
 from django.db import models
+from .models.user_model import CustomUser
 from django.contrib.auth.models import BaseUserManager, AbstractUser
 
 # Create your models here.
