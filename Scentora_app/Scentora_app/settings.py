@@ -79,15 +79,13 @@ WSGI_APPLICATION = 'Scentora_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Scentora_django',
+        'NAME': 'Scentora_app',  # Name of your PostgreSQL database
         'USER': 'postgres',
-        'PASSWORD': 'Ga123',
+        'PASSWORD': 'Sara@1234',
         'HOST': 'localhost',  
         'PORT': '5432',
     }
 }
-
-
 
 
 # Password validation
