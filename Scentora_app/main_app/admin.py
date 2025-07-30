@@ -4,8 +4,13 @@ from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, Category
 
 
+from main_app.models.product_model import Product
+from main_app.models.brand_model import Brand
 # Register your models here.
 
+
+admin.site.register(Product)
+admin.site.register(Brand)
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -22,5 +27,3 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'is_active')
     search_fields = ('name',)
     list_filter = ('is_active',)
-
-
