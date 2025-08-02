@@ -2,7 +2,9 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from main_app.models.product_model import Product
 from main_app.models.brand_model import Brand
+from .models import CustomUser, Category
 from .serializers import ProductSerializer, BrandSerializer
+from .serializers import CustomUserSerializer, CategorySerializer
 
 # Create your views here.
 class ProductViewSet(viewsets.ModelViewSet):
@@ -12,11 +14,6 @@ class ProductViewSet(viewsets.ModelViewSet):
 class BrandViewSet(viewsets.ModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
-
-from .models import CustomUser, Category
-from .serializers import CustomUserSerializer, CategorySerializer
-
-# Create your views here.
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
