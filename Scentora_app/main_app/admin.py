@@ -1,16 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-
 from .models import CustomUser, Category
-
-
 from main_app.models.product_model import Product
 from main_app.models.brand_model import Brand
 # Register your models here.
 
-
-admin.site.register(Product)
-admin.site.register(Brand)
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -22,10 +16,42 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('email', 'username')
     ordering = ('email',)
 
+
+
+class CategoryWithSubFilter(admin.SimpleListFilter):
+    title = 'Category (with subcategories)'
+    parameter_name = 'category'
+
+    def lookups(self, request, model_admin):
+        return [(cat.id, cat.name) for cat in Category.objects.filter(parent__isnull=True)]
+
+    def get_subcategory_ids(self, parent_id):
+        return list(Category.objects.filter(parent_id=parent_id).values_list('id', flat=True))
+
+    def queryset(self, request, queryset):
+        if self.value():
+            category_id = int(self.value())
+            child_ids = self.get_subcategory_ids(category_id)
+            return queryset.filter(category__in=[category_id] + child_ids)
+        return queryset
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'brand', 'category', 'price', 'quantity')
+    search_fields = ('name',)
+    list_filter = (CategoryWithSubFilter, 'brand')
+
+
+@admin.register(Brand)
+class BrandAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+    list_filter = ('name',)
+
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'is_active')
+    list_display = ('name', 'parent')
     search_fields = ('name',)
-    list_filter = ('is_active',)
-
-
+    list_filter = ('parent',)

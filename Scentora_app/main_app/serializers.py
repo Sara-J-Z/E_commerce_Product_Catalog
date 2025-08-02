@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from rest_framework import serializers
 from .models import CustomUser, Category
+from main_app.models.product_model import Product
+from main_app.models.brand_model import Brand
+
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,16 +11,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'id', 'email', 'username', 'date_of_birth', 'phone_number',
             'address', 'gender'
         ]
-        # You can add extra kwargs if needed, e.g. read_only_fields = ['id']
+       
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'name', 'icon', 'is_active']
-from rest_framework import serializers
 
-from main_app.models.product_model import Product
-from main_app.models.brand_model import Brand
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,9 +25,9 @@ class BrandSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'logo']  
         
 class ProductSerializer(serializers.ModelSerializer):
-    # category = CategorySerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
     brand = BrandSerializer(read_only=True)
-    # category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source='category', write_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source='category', write_only=True)
     brand_id = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all(), source='brand', write_only=True)
 
     class Meta:
@@ -37,20 +36,4 @@ class ProductSerializer(serializers.ModelSerializer):
                   'category', 'brand', 'category_id', 'brand_id', 'created_at']
     
 
-from rest_framework import serializers
-from .models import CustomUser, Category
-
-class CustomUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = [
-            'id', 'email', 'username', 'date_of_birth', 'phone_number',
-            'address', 'gender'
-        ]
-        # You can add extra kwargs if needed, e.g. read_only_fields = ['id']
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['id', 'name', 'icon', 'is_active']
 
