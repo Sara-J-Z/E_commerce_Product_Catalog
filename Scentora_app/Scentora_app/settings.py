@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$svc1b4^2p+i=*iw7d7d60ajte*0*bxt)urcqhl42wjf&*(+@)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,17 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main_app', # <---- your app name here
-    'rest_framework', # <---- rest framework package,
+    'main_app',
+    'rest_framework_simplejwt.token_blacklist',
+    'rest_framework',
     'corsheaders',
+    'django_extensions',
 ]
 
 AUTH_USER_MODEL = 'main_app.CustomUser'
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -81,9 +84,9 @@ WSGI_APPLICATION = 'Scentora_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'scentora_db_v2',  # Name of your PostgreSQL database
+        'NAME': 'Scentora_DB_v2',  # Name of your PostgreSQL database
         'USER': 'postgres',
-        'PASSWORD': 'Sara@1234',
+        'PASSWORD': 'Ga123',
         'HOST': 'localhost',  
         'PORT': '5432',
     }
@@ -120,6 +123,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
@@ -136,6 +142,19 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",  
+# ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),  # make it long if you want only one token
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=0),  # disable refresh (optional)
+}

@@ -1,10 +1,21 @@
 from django.shortcuts import render
-from rest_framework import viewsets
-from main_app.models.product_model import Product
-from main_app.models.brand_model import Brand
-from .models import CustomUser, Category
-from .serializers import ProductSerializer, BrandSerializer
-from .serializers import CustomUserSerializer, CategorySerializer
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from .models import CustomUser, Category, Product, Brand
+from rest_framework_simplejwt.views import TokenObtainPairView
+from django.http import JsonResponse
+from .serializers import (
+    ProductSerializer, 
+    BrandSerializer, 
+    CustomUserSerializer, 
+    CategorySerializer, 
+    RegisterSerializer,
+    CustomTokenObtainPairSerializer
+)
+
+
 
 # Create your views here.
 class ProductViewSet(viewsets.ModelViewSet):
@@ -22,4 +33,21 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
+class RegisterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response(RegisterSerializer(user).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+def test_users_endpoint(request):
+    return JsonResponse({"message": "Users endpoint is working"})
