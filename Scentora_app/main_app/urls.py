@@ -8,7 +8,11 @@ from .views import (
     CustomUserViewSet,
     CategoryViewSet,
     CustomTokenObtainPairView,
-    RegisterView
+    RegisterView,
+    SignInView,
+    CategoryDetailView,
+    NewsletterSubscriberCreateView,
+
 )
 
 router = DefaultRouter()
@@ -23,6 +27,9 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('signin/', SignInView.as_view(), name='signin'),
+    path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
+    path('newsletter/subscribe/', NewsletterSubscriberCreateView.as_view(), name='newsletter-subscribe'),
 
 ]
 

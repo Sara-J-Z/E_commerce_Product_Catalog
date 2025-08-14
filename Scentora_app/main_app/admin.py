@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, Category
 from main_app.models.product_model import Product
 from main_app.models.brand_model import Brand
+from main_app.models.newsletter_model import NewsletterSubscriber
 # Register your models here.
 
 @admin.register(CustomUser)
@@ -55,3 +56,9 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'parent')
     search_fields = ('name',)
     list_filter = ('parent',)
+
+@admin.register(NewsletterSubscriber)
+class NewsletterSubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'subscribed_at') 
+    search_fields = ('email',) 
+    list_filter = ('subscribed_at',)  

@@ -3,9 +3,12 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from django.contrib.auth import authenticate
 from .models import CustomUser, Category, Product, Brand
+from .models.newsletter_model import NewsletterSubscriber
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.http import JsonResponse
+from rest_framework import generics
 from .serializers import (
     ProductSerializer, 
     BrandSerializer, 
@@ -13,7 +16,8 @@ from .serializers import (
     CustomUserSerializer, 
     CategorySerializer, 
     RegisterSerializer,
-    CustomTokenObtainPairSerializer
+    CustomTokenObtainPairSerializer,
+    NewsletterSubscriberSerializer
 )
 
 
@@ -39,6 +43,11 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+class CategoryDetailView(generics.RetrieveAPIView):
+    queryset = Category.objects.filter(is_active=True)
+    serializer_class = CategorySerializer
+
     
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -57,3 +66,35 @@ class RegisterView(APIView):
 
 def test_users_endpoint(request):
     return JsonResponse({"message": "Users endpoint is working"})
+
+class SignInView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = authenticate(request, email=email, password=password)
+        print(user)
+        if user:
+            print("before token")
+            token = CustomTokenObtainPairSerializer.get_token(user=user)
+            print(token)
+            return Response({
+                'token': str(token),
+                'user_id': user.id,
+                'email': user.email
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Invalid credentials."}, status=status.HTTP_400_BAD_REQUEST)
+    
+class NewsletterSubscriberCreateView(generics.CreateAPIView):
+        queryset = NewsletterSubscriber.objects.all()
+        serializer_class = NewsletterSubscriberSerializer
+
+
+
+
+
+
+
+
+

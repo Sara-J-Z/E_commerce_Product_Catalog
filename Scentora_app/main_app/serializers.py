@@ -3,6 +3,7 @@ from .models import CustomUser, Category
 from main_app.models.product_model import Product
 from main_app.models.brand_model import Brand
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from main_app.models.newsletter_model import NewsletterSubscriber
 
 
 
@@ -33,6 +34,16 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return user
 
+class RecursiveSerializer(serializers.Serializer):
+    def to_representation(self, value):
+        if isinstance(value, list):
+            serializer = self.parent.parent.__class__(value, context=self.context)
+            return serializer.data
+class SubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'icon', 'is_active']
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -43,13 +54,7 @@ class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
         fields = ['id', 'name', 'logo']  
-        
-class BrandDetailSerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)  
 
-    class Meta:
-        model = Brand
-        fields = ['id', 'name', 'logo', 'products']
 
         
 class ProductSerializer(serializers.ModelSerializer):
@@ -77,3 +82,15 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         return token
     
+class BrandDetailSerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True, read_only=True)  
+
+    class Meta:
+        model = Brand
+        fields = ['id', 'name', 'logo', 'products']
+
+
+class NewsletterSubscriberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsletterSubscriber
+        fields = ['id', 'email', 'subscribed_at']
