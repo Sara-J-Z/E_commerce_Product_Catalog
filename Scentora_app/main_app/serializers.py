@@ -33,16 +33,29 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return user
 
-class CategorySerializer(serializers.ModelSerializer):
+class RecursiveSerializer(serializers.Serializer):
+    def to_representation(self, value):
+        if isinstance(value, list):
+            serializer = self.parent.parent.__class__(value, context=self.context)
+            return serializer.data
+        
+class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'name', 'icon', 'is_active']
+
+class CategorySerializer(serializers.ModelSerializer):
+    subcategories = SubCategorySerializer(many=True, read_only=True)
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'icon', 'is_active', 'subcategories']
 
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
         fields = ['id', 'name', 'logo']  
+
         
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
@@ -69,3 +82,20 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         return token
     
+
+class BrandDetailSerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Brand
+        fields = ['id', 'name', 'logo', 'products']
+
+class PasswordUpdateSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True, write_only=True)
+    new_password = serializers.CharField(required=True, write_only=True)
+    new_password_confirm = serializers.CharField(required=True)    
+
+    def validate(self, data):
+        if data['new_password'] != data['new_password_confirm']:
+            raise serializers.ValidationError("New passwords do not match.")
+        return data
